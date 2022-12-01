@@ -29,6 +29,7 @@ app.use(passport.session());
  
 //----- Routes
 app.use(require("./routes/auth"));
+app.use(require("./routes/business"));
 
 //----- Connection
 app.listen(port, () => {
