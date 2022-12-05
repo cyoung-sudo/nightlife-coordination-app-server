@@ -7,7 +7,10 @@ const client = yelp.client(process.env.YELP_API);
 //----- Search for businesses
 businessRoutes.post("/api/business/search", (req, res) => {
   client.search({
-    location: req.body.location
+    term: req.body.term,
+    location: req.body.location,
+    price: req.body.price,
+    open_now: req.body.open
   })
   .then(searchResults => {
     let businesses = searchResults.jsonBody.businesses;
