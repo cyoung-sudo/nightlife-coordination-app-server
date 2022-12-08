@@ -22,4 +22,18 @@ businessRoutes.post("/api/business/search", (req, res) => {
   .catch(err => console.log(err));
 });
 
+//----- Retrieve businesses for given business-id's
+businessRoutes.post("/api/business/getBusinesses", async (req, res) => {
+  let businesses = [];
+  for(let userBusiness of req.body.userBusinesses) {
+    let business = await client.business(userBusiness.businessId);
+    businesses.push(business.jsonBody);
+  }
+
+  res.json({
+    success: true,
+    businesses
+  });
+});
+
 module.exports = businessRoutes;

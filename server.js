@@ -31,6 +31,7 @@ app.use(passport.session());
 app.use(require("./routes/auth"));
 app.use(require("./routes/business"));
 app.use(require("./routes/user"));
+app.use(require("./routes/userBusiness"));
 
 //----- Connection
 app.listen(port, () => {
