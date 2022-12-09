@@ -23,17 +23,31 @@ businessRoutes.post("/api/business/search", (req, res) => {
 });
 
 //----- Retrieve businesses for given business-id's
+// >>>>> Handle API error for too many requests/sec <<<<<
 businessRoutes.post("/api/business/getBusinesses", async (req, res) => {
-  let businesses = [];
+  let promises = []
+
   for(let userBusiness of req.body.userBusinesses) {
-    let business = await client.business(userBusiness.businessId);
-    businesses.push(business.jsonBody);
+    promises.push(client.business(userBusiness.businessId));
   }
 
-  res.json({
-    success: true,
-    businesses
-  });
+  Promise.all(promises)
+  .then(resData => {
+    let businesses = [];
+    for(let data of resData) {
+      businesses.push(data.jsonBody);
+    }
+    res.json({
+      success: true,
+      businesses
+    })
+  })
+  .catch(err => {
+    res.json({
+      success: false,
+      message: "..."
+    })
+  })
 });
 
 module.exports = businessRoutes;

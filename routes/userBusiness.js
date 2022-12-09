@@ -3,8 +3,9 @@ const userBusinessRoutes = express.Router();
 // Models
 const UserBusiness = require("../models/userBusinessModel");
 
+userBusinessRoutes.route("/api/userBusiness")
 //----- Add new user-business
-userBusinessRoutes.post("/api/userBusiness", (req, res) => {
+.post((req, res) => {
   // Check for existing duplicate
   UserBusiness.findOne({
     userId: req.body.userId,
@@ -33,6 +34,17 @@ userBusinessRoutes.post("/api/userBusiness", (req, res) => {
   })
   .catch(err => console.log(err));
 })
+//----- Delete given user-buisness
+.delete((req, res) => {
+  UserBusiness.findOneAndDelete({
+    userId: req.body.userId,
+    businessId: req.body.businessId
+  })
+  .then(deletedDoc => {
+    res.json({ success: true });
+  })
+  .catch(err => console.log(err));
+});
 
 //----- Retrieve user-businesses for given user
 userBusinessRoutes.post("/api/userBusiness/user", (req, res) => {
@@ -46,6 +58,6 @@ userBusinessRoutes.post("/api/userBusiness/user", (req, res) => {
     });
   })
   .catch(err => console.log(err));
-})
+});
 
 module.exports = userBusinessRoutes;
