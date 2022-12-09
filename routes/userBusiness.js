@@ -5,16 +5,31 @@ const UserBusiness = require("../models/userBusinessModel");
 
 //----- Add new user-business
 userBusinessRoutes.post("/api/userBusiness", (req, res) => {
-  // Created new user-business
-  let newUserBusiness = new UserBusiness({
+  // Check for existing duplicate
+  UserBusiness.findOne({
     userId: req.body.userId,
     businessId: req.body.businessId
-  });
-  
-  // Save user-business
-  newUserBusiness.save()
-  .then(savedUserBusiness => {
-    res.json({ success: true });
+  })
+  .then(userBusiness => {
+    if(userBusiness === null) {
+      // Created new user-business
+      let newUserBusiness = new UserBusiness({
+        userId: req.body.userId,
+        businessId: req.body.businessId
+      });
+      
+      // Save user-business
+      newUserBusiness.save()
+      .then(savedUserBusiness => {
+        res.json({ success: true });
+      })
+      .catch(err => console.log(err));
+    } else {
+      res.json({
+        success: false,
+        message: "Business already added"
+      });
+    }
   })
   .catch(err => console.log(err));
 })
