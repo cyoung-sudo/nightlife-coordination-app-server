@@ -32,6 +32,7 @@ app.use(require("./routes/auth"));
 app.use(require("./routes/business"));
 app.use(require("./routes/user"));
 app.use(require("./routes/userBusiness"));
+app.use(require("./routes/userSearch"));
 
 //----- Connection
 app.listen(port, () => {
