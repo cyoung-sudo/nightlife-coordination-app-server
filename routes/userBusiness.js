@@ -46,8 +46,9 @@ userBusinessRoutes.route("/api/userBusiness")
   .catch(err => console.log(err));
 });
 
+userBusinessRoutes.route("/api/userBusiness/user")
 //----- Retrieve user-businesses for given user
-userBusinessRoutes.post("/api/userBusiness/user", (req, res) => {
+.post((req, res) => {
   UserBusiness.find({
     userId: req.body.userId
   })
@@ -56,6 +57,16 @@ userBusinessRoutes.post("/api/userBusiness/user", (req, res) => {
       success: true,
       userBusinesses
     });
+  })
+  .catch(err => console.log(err));
+})
+//----- Delete user-businesses for authenticated user
+.delete((req, res) => {
+  UserBusiness.deleteMany({
+    userId: req.user._id
+  })
+  .then(deleteCount => {
+    res.json({ success: true });
   })
   .catch(err => console.log(err));
 });

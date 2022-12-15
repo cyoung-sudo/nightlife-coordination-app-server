@@ -23,8 +23,9 @@ userSearchRoutes.post("/api/userSearch", (req, res) => {
   .catch(err => console.log(err));
 });
 
+userSearchRoutes.route("/api/userSearch/user")
 //----- Retrieve user-search for given user
-userSearchRoutes.post("/api/userSearch/user", (req, res) => {
+.post((req, res) => {
   UserSearch.findOne({
     userId: req.body.userId
   })
@@ -40,6 +41,16 @@ userSearchRoutes.post("/api/userSearch/user", (req, res) => {
         message: "No search history found"
       })
     }
+  })
+  .catch(err => console.log(err));
+})
+//----- Delete user-search for authenticated user
+.delete((req, res) => {
+  UserSearch.findOneAndDelete({
+    userId: req.user._id
+  })
+  .then(deletedDoc => {
+    res.json({ success: true });
   })
   .catch(err => console.log(err));
 });
