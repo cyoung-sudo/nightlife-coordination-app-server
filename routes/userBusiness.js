@@ -5,31 +5,43 @@ const UserBusiness = require("../models/userBusinessModel");
 
 userBusinessRoutes.route("/api/userBusiness")
 //----- Add new user-business
+// (Max 5 businesses to minimize requests)
 .post((req, res) => {
-  // Check for existing duplicate
-  UserBusiness.findOne({
+  UserBusiness.find({
     userId: req.body.userId,
-    businessId: req.body.businessId
   })
-  .then(userBusiness => {
-    if(userBusiness === null) {
-      // Created new user-business
-      let newUserBusiness = new UserBusiness({
-        userId: req.body.userId,
-        businessId: req.body.businessId
-      });
-      
-      // Save user-business
-      newUserBusiness.save()
-      .then(savedUserBusiness => {
-        res.json({ success: true });
-      })
-      .catch(err => console.log(err));
+  .then(userBusinesses => {
+    // Check limit
+    if(userBusinesses.length > 4) {
+      return { error:  "Can only add up to 5 businesses" };
     } else {
+      // Check for duplicate
+      let result = userBusinesses.some(userBusiness => {
+        return userBusiness.businessId === req.body.businessId;
+      });
+
+      if(result) {
+        return { error: "Business already added" };
+      } else {
+        // Created new user-business
+        let newUserBusiness = new UserBusiness({
+          userId: req.body.userId,
+          businessId: req.body.businessId
+        });
+        
+        // Save user-business
+        return newUserBusiness.save();
+      }
+    }
+  })
+  .then(result => {
+    if(result.error) {
       res.json({
         success: false,
-        message: "Business already added"
+        message: result.error
       });
+    } else {
+      res.json({ success: true });
     }
   })
   .catch(err => console.log(err));

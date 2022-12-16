@@ -23,12 +23,20 @@ businessRoutes.post("/api/business/search", (req, res) => {
 });
 
 //----- Retrieve businesses for given business-id's
-// >>>>> Handle API error for too many requests/sec <<<<<
+// (Added delay between requests to avoid request-frequency error)
 businessRoutes.post("/api/business/getBusinesses", async (req, res) => {
   let promises = []
+  let delay = 500;
 
   for(let userBusiness of req.body.userBusinesses) {
-    promises.push(client.business(userBusiness.businessId));
+    let promise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve(client.business(userBusiness.businessId));
+      }, delay);
+      delay += 500;
+    });
+
+    promises.push(promise);
   }
 
   Promise.all(promises)
@@ -42,12 +50,7 @@ businessRoutes.post("/api/business/getBusinesses", async (req, res) => {
       businesses
     })
   })
-  .catch(err => {
-    res.json({
-      success: false,
-      message: "..."
-    })
-  })
+  .catch(err => console.log(err));
 });
 
 module.exports = businessRoutes;
