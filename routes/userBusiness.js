@@ -4,6 +4,17 @@ const userBusinessRoutes = express.Router();
 const UserBusiness = require("../models/userBusinessModel");
 
 userBusinessRoutes.route("/api/userBusiness")
+//----- Retrieve all user-businesses
+.get((req, res) => {
+  UserBusiness.find({})
+  .then(userBusinesses => {
+    res.json({
+      success: true,
+      userBusinesses
+    })
+  })
+  .catch(err => console.log(err));
+})
 //----- Add new user-business
 // (Max 5 businesses to minimize requests)
 .post((req, res) => {
