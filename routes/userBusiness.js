@@ -86,7 +86,7 @@ userBusinessRoutes.route("/api/userBusiness/user")
 //----- Delete user-businesses for authenticated user
 .delete((req, res) => {
   UserBusiness.deleteMany({
-    userId: req.user._id
+    userId: req.body.userId
   })
   .then(deleteCount => {
     res.json({ success: true });

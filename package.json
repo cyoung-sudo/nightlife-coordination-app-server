@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node node_modules/.bin/jest --verbose --watch"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +21,9 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "yelp-fusion": "^3.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "supertest": "^6.3.3"
   }
 }

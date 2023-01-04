@@ -47,7 +47,7 @@ userSearchRoutes.route("/api/userSearch/user")
 //----- Delete user-search for authenticated user
 .delete((req, res) => {
   UserSearch.findOneAndDelete({
-    userId: req.user._id
+    userId: req.body.userId
   })
   .then(deletedDoc => {
     res.json({ success: true });

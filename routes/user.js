@@ -34,9 +34,9 @@ userRoutes.route("/api/user")
   })
   .catch(err => console.log(err));
 })
-//----- Delete authenticated user
+//----- Delete a user
 .delete((req, res) => {
-  User.findByIdAndDelete(req.user._id)
+  User.findByIdAndDelete(req.body.userId)
   .then(deletedDoc => {
     res.json({ success: true });
   })
